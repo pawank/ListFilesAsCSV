@@ -1,0 +1,1 @@
+List files of the given folder and write a file with all file names
