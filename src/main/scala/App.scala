@@ -3,12 +3,25 @@
 //!#
 package apps
 
-import ammonite.ops._
+import java.io.File
 
+import ammonite.ops._
+import com.github.tototoshi.csv._
 //Examples of usage
 //<Program> /dummy/path:target jpg png
 //<Program> /full/path/of/the/target
 object Program {
+
+  def writePathsToCSV(paths:Seq[Path]):Option[String] = {
+    val filename = "output.csv"
+    val f = new File(filename)
+    val writer = CSVWriter.open(f)
+    paths.foreach(path => {
+      writer.writeRow(List(path.toString()))
+    })
+    writer.close()
+    Some(filename)
+  }
 
   def listOfFiles(path:String, extensions:Seq[String]=Seq.empty):Seq[Path] = {
     //val wd = cwd/s"${path}"
@@ -33,6 +46,7 @@ object Program {
   def main(args:Array[String]) = {
     val paths = listOfFiles(args(0),args.tail.toSeq)
     paths.foreach(println)
+    writePathsToCSV(paths)
     print("")
   }
 }
